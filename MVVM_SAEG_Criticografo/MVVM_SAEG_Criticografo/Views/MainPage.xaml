@@ -165,18 +165,15 @@
                 />
         <Frame Margin="10,15,10,0"
                BorderColor="Black">
-            <Entry IsReadOnly="False"
-                   HorizontalOptions="Fill"
+            <Editor IsReadOnly="True"
                    TextColor="#000"
                    TextTransform="Uppercase"
-                   VerticalTextAlignment="Center"
-                   HorizontalTextAlignment="Start"
-                   WidthRequest="10"
-                   FontSize="28"
+                   FontSize="24"
                    FontFamily="FunnyPirate"
                    CharacterSpacing="2"
                    Text="{Binding Resultado}"
-                   />
+                   AutoSize="TextChanges"
+                    />
         </Frame>
     </StackLayout>
 

@@ -23,7 +23,7 @@ namespace MVVM_SAEG_Criticografo.ViewModel
         private bool _feo;
         private bool _genero = true;
         protected int contador = 0;
-        public string[] arrayDeCriticas = {"Alt","List","Rar","Fe","Extravagante","Grande"}; 
+        public string[] arrayDeCriticas = {"Alt","List","Rar","Fe","Extravagante","Grande"};
         #endregion
        
         #region CONSTRUCTOR
@@ -88,25 +88,21 @@ namespace MVVM_SAEG_Criticografo.ViewModel
         #region PROCESS
         public void SeleccionPorGenero()
         {
-            string[] reiniciarArray = arrayDeCriticas;
-            if (arrayDeCriticas[0].Count() > 3)
+            if (arrayDeCriticas[0].Length > 3)
             {
-                arrayDeCriticas = reiniciarArray;
+                for (int i = 0; i < 4; i++)
+                    arrayDeCriticas[i] = arrayDeCriticas[i].Substring(0, arrayDeCriticas[i].Length - 1);
                 SeleccionPorGenero();
             }
             else if(Genero)
             {
-                for(int i = 0; i < 4; i++)
-                {
-                    arrayDeCriticas[i].Concat("a");
-                }
+                for (int i = 0; i < 4; i++)
+                    arrayDeCriticas[i] +=  "a";
             }
             else
             {
                 for (int i = 0; i < 4; i++)
-                {
-                    arrayDeCriticas[i].Concat("o");
-                }
+                    arrayDeCriticas[i] += "o";
             }
         }
         public string FormarCadenaDeResultado()
@@ -146,27 +142,31 @@ namespace MVVM_SAEG_Criticografo.ViewModel
             }
             return cadenaResultante;
         }
-        public async Task Criticar()
+        public void Criticar()
         {
             Resultado = "";
             string cadena = FormarCadenaDeResultado();
-            if(contador == 0)
+            if (contador == 0 || _nombre.Length == 0)
             {
-                await DisplayAlert("Ingresa Todos Los Datos", "Te Hace Falta Ingresar Más Datos", "OK");
+                DisplayAlert("Ingresa Todos Los Datos", "Te Hace Falta Ingresar Más Datos", "OK");
             }
-            else if(contador == 1)
+            else if (contador == 1)
             {
-                Resultado = $"{Nombre} es: {cadena}.";
+                Resultado = $"{Nombre} es: {cadena.Substring(0, cadena.Length - 2)}.";
             }
             else
             {
-                Resultado = "Holas";
+                //posicion de la ultima coma
+                int ultimaComa = cadena.LastIndexOf(",");
+                int penultimaComa = cadena.LastIndexOf(',', ultimaComa - 1);
+                string cadenaLimpia = cadena.Substring(0, penultimaComa)+ " y" +cadena.Substring(penultimaComa + 1, ultimaComa - penultimaComa - 1);
+                Resultado = $"{Nombre} es: {cadenaLimpia}.";
             }
         }
         #endregion
 
         #region COMMADS
-        public ICommand CriticarCommand => new Command(async () => await Criticar());
+        public ICommand CriticarCommand => new Command(Criticar);
         #endregion
     }
 }
